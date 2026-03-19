@@ -4,7 +4,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // This pulls the latest index.html and Dockerfile from your Repo
-                git branch: 'main', url: 'https://github.com/YOUR_USERNAME/ambank-web-app.git'
+                git branch: 'main', url: 'https://github.com/Jsriaws/ambank-web-app.git'
             }
         }
         stage('Clean Old Container') {
