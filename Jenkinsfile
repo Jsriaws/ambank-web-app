@@ -1,20 +1,25 @@
 pipeline {
     agent any
     stages {
-        stage('Clean Up') {
+        stage('Checkout Code') {
+            steps {
+                // This pulls the latest index.html and Dockerfile from your Repo
+                git branch: 'main', url: 'https://github.com/YOUR_USERNAME/ambank-web-app.git'
+            }
+        }
+        stage('Clean Old Container') {
             steps {
                 sh 'docker rm -f my-web-site || true'
             }
         }
-        stage('Build & Run') {
+        stage('Build Docker Image') {
             steps {
-                // 1. Force create the file in the CURRENT workspace folder
-                sh 'echo "<h1>Welcome to AmBank DevOps - Version 2.0</h1>" > index.html'
-                
-                // 2. Build a fresh image (no cache) to ensure index.html is copied
-                sh 'docker build --no-cache -t my-custom-web:latest .'
-                
-                // 3. Run the container
+                // Now we just build using the files already in the workspace
+                sh 'docker build -t my-custom-web:latest .'
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
                 sh 'docker run -d --name my-web-site -p 80:80 my-custom-web:latest'
             }
         }
